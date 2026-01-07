@@ -32,9 +32,17 @@ export class CustomersService {
 
     if (existing) throw new BadRequestException('Customer phone already exists');
 
+    if (dto.nationalId) {
+      const nationalConflict = await this.prisma.customer.findFirst({
+        where: { nationalId: dto.nationalId },
+        select: { id: true },
+      });
+      if (nationalConflict) throw new BadRequestException('Customer nationalId already exists');
+    }
+
     return this.prisma.customer.create({
-      data: { name: dto.name, phoneE164 },
-      select: { id: true, name: true, phoneE164: true, createdAt: true, updatedAt: true },
+      data: { name: dto.name, phoneE164, nationalId: dto.nationalId ?? undefined },
+      select: { id: true, name: true, phoneE164: true, nationalId: true, createdAt: true, updatedAt: true },
     });
   }
 
@@ -49,7 +57,7 @@ export class CustomersService {
         orderBy: { createdAt: 'desc' },
         skip,
         take: limit,
-        select: { id: true, name: true, phoneE164: true, createdAt: true, updatedAt: true },
+        select: { id: true, name: true, phoneE164: true, nationalId: true, createdAt: true, updatedAt: true },
       }),
     ]);
 
@@ -59,7 +67,7 @@ export class CustomersService {
   async getById(id: string) {
     const customer = await this.prisma.customer.findUnique({
       where: { id },
-      select: { id: true, name: true, phoneE164: true, createdAt: true, updatedAt: true },
+      select: { id: true, name: true, phoneE164: true, nationalId: true, createdAt: true, updatedAt: true },
     });
 
     if (!customer) throw new NotFoundException('Customer not found');
@@ -80,13 +88,22 @@ export class CustomersService {
       if (conflict) throw new BadRequestException('Customer phone already exists');
     }
 
+    if (dto.nationalId) {
+      const conflict = await this.prisma.customer.findFirst({
+        where: { AND: [{ id: { not: id } }, { nationalId: dto.nationalId }] },
+        select: { id: true },
+      });
+      if (conflict) throw new BadRequestException('Customer nationalId already exists');
+    }
+
     return this.prisma.customer.update({
       where: { id },
       data: {
         name: dto.name,
         phoneE164,
+        nationalId: dto.nationalId ?? undefined,
       },
-      select: { id: true, name: true, phoneE164: true, createdAt: true, updatedAt: true },
+      select: { id: true, name: true, phoneE164: true, nationalId: true, createdAt: true, updatedAt: true },
     });
   }
 }

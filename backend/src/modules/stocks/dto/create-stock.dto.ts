@@ -26,4 +26,9 @@ export class CreateStockDto {
   @IsInt()
   @Min(0)
   dailyLateFee?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  reorderThreshold?: number;
 }

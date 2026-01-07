@@ -2,11 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import { AdminAuthContextProvider } from './context/AdminAuthContext.jsx'
-import { EmployeeAuthContextProvider } from './context/EmployeeAuthContext.jsx'
-import { NetworkStatusProvider } from './context/useNetworkContext.jsx'
-import { PartnerAuthProvider } from './context/PartnerAuthContext.jsx'
-import { SocketProvider } from './context/SocketContext.jsx'
+import { HiguraAuthProvider } from './context/HiguraAuthContext.jsx'
 
 
 // // PWA Auto-Update Registration
@@ -15,7 +11,7 @@ import { SocketProvider } from './context/SocketContext.jsx'
 // // Register Service Worker with auto-update
 // const updateSW = registerSW({
 //   onNeedRefresh() {
-//     console.log('🔄 New version available, updating automatically...')
+//     console.log(' New version available, updating automatically...')
 //     // Auto-update without user prompt
 //     updateSW(true)
 //     // Optional: Show a brief toast notification before reload
@@ -25,19 +21,19 @@ import { SocketProvider } from './context/SocketContext.jsx'
 //     }, 1500) // Give user time to see the notification
 //   },
 //   onOfflineReady() {
-//     console.log('✅ App is ready to work offline!')
+//     console.log(' App is ready to work offline!')
 //     // Dispatch custom event for components to listen to
 //     window.dispatchEvent(new CustomEvent('pwa-offline-ready'))
 //   },
 //   onRegistered(registration) {
-//     console.log('🚀 Service Worker registered successfully')
+//     console.log(' Service Worker registered successfully')
 //     // Check for updates every 30 seconds
 //     setInterval(() => {
 //       registration?.update()
 //     }, 30000)
 //   },
 //   onRegisterError(error) {
-//     console.error('❌ Service Worker registration failed:', error)
+//     console.error(' Service Worker registration failed:', error)
 //   }
 // })
 
@@ -60,7 +56,7 @@ import { SocketProvider } from './context/SocketContext.jsx'
 //       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 //       animation: slideIn 0.3s ease-out;
 //     ">
-//       🔄 Updating to latest version...
+//       Updating to latest version...
 //     </div>
 //     <style>
 //       @keyframes slideIn {
@@ -101,27 +97,14 @@ import { SocketProvider } from './context/SocketContext.jsx'
 
 // // Listen for app updates and network status
 // window.addEventListener('online', () => {
-//   console.log('📶 Back online - checking for updates...')
+//   console.log(' Back online - checking for updates...')
 //   window.PWAUpdate.checkForUpdates()
 // })
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-     <NetworkStatusProvider retryInterval={3000}>
-
-<SocketProvider>
-
-    <AdminAuthContextProvider>
-      <EmployeeAuthContextProvider>
-        <PartnerAuthProvider>
-
-        
-        <App />
-        </PartnerAuthProvider>
-      </EmployeeAuthContextProvider>
-    </AdminAuthContextProvider>
-</SocketProvider>
-
-     </NetworkStatusProvider>
+    <HiguraAuthProvider>
+      <App />
+    </HiguraAuthProvider>
   </StrictMode>,
 )
