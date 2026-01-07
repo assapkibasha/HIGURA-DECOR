@@ -160,14 +160,14 @@ self.addEventListener('push', (event) => {
     }
   }
 
-  const title = data.title || 'Abytech Hub';
+  const title = data.title || 'Higura Decor';
 
   const options = {
     body: data.body || data.message || 'New message',
-    icon: data.icon || '/pwa-192x192.png',
-    badge: data.badge || '/pwa-72x72.png',
+    icon: data.icon || '/higura_logo.png',
+    badge: data.badge || '/higura_logo.png',
     data: data.data || { url: data.url, notificationId: data.notificationId },
-    tag: data.tag || data.notificationId || 'abytech-notification',
+    tag: data.tag || data.notificationId || 'higura-notification',
     requireInteraction: !!data.requireInteraction,
     vibrate: data.vibrate || [300, 200, 300],
     renotify: true,

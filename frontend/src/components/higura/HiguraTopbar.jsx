@@ -1,6 +1,23 @@
 import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import api from '../../api/api';
+import { useHiguraAuth } from '../../context/HiguraAuthContext';
 
 export default function HiguraTopbar() {
+  const navigate = useNavigate();
+  const { logout } = useHiguraAuth();
+
+  const onLogout = async () => {
+    try {
+      await api.post('/users/logout');
+    } catch {
+      // ignore
+    } finally {
+      logout();
+      navigate('/login', { replace: true });
+    }
+  };
+
   return (
     <header className="h-16 bg-white border-b border-gray-200">
       <div className="h-full px-6 flex items-center justify-between gap-4">
@@ -22,6 +39,14 @@ export default function HiguraTopbar() {
             <div className="text-sm font-medium text-gray-900">Higura User</div>
             <div className="text-xs text-gray-500">Higura Decor</div>
           </div>
+
+          <button
+            type="button"
+            onClick={onLogout}
+            className="ml-3 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm hover:bg-gray-50"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </header>

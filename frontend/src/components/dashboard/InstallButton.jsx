@@ -60,19 +60,33 @@ const InstallButton = () => {
   }, [isInstalled, isDismissed, deferredPrompt]);
 
   const handleInstallClick = async () => {
+    // Prefer the shared PWA install helper (defined in index.html)
+    if (window.PWAUtils && typeof window.PWAUtils.installPWA === 'function') {
+      try {
+        const installed = await window.PWAUtils.installPWA();
+        if (installed) {
+          setShowButton(false);
+          setIsInstalled(true);
+        }
+      } catch (error) {
+        console.error('Error during installation:', error);
+      }
+      return;
+    }
+
     if (!deferredPrompt) {
       // Show manual install instructions
       const userAgent = navigator.userAgent.toLowerCase();
       let instructions = '';
 
       if (userAgent.includes('chrome') && userAgent.includes('android')) {
-        instructions = 'To install this app:\n\n1. Tap the menu (⋮) in the top-right corner\n2. Select "Add to Home screen"\n3. Tap "Add" to confirm';
+        instructions = 'To install Higura Decor:\n\n1. Tap the menu (⋮) in the top-right corner\n2. Select "Add to Home screen"\n3. Tap "Add" to confirm';
       } else if (userAgent.includes('safari') && userAgent.includes('iphone')) {
-        instructions = 'To install this app:\n\n1. Tap the share button (□↑) at the bottom\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to confirm';
+        instructions = 'To install Higura Decor:\n\n1. Tap the share button (□↑) at the bottom\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to confirm';
       } else if (userAgent.includes('firefox')) {
-        instructions = 'To install this app:\n\n1. Tap the menu (⋮) in the top-right corner\n2. Select "Install"\n3. Tap "Add" to confirm';
+        instructions = 'To install Higura Decor:\n\n1. Tap the menu (⋮) in the top-right corner\n2. Select "Install"\n3. Tap "Add" to confirm';
       } else {
-        instructions = 'To install this app, look for an "Install" or "Add to Home Screen" option in your browser menu.';
+        instructions = 'To install Higura Decor, look for an "Install" or "Add to Home Screen" option in your browser menu.';
       }
 
       alert(instructions);
@@ -133,7 +147,7 @@ const InstallButton = () => {
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-sm font-semibold text-gray-800 truncate">
-                Install Aby Inventory
+                Install Higura Decor
               </div>
               <div className="text-xs text-gray-500 truncate">
                 Quick access from your home screen

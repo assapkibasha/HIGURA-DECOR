@@ -55,7 +55,7 @@ export default function AboutPage() {
   };
 
   const stats = [
-    { number: "1,200+", label: "Businesses Using ABY", icon: <Building className="w-8 h-8" /> },
+    { number: "1,200+", label: "Businesses Using Higura", icon: <Building className="w-8 h-8" /> },
     { number: "5+", label: "Years of Innovation", icon: <Calendar className="w-8 h-8" /> },
     { number: "10M+", label: "Transactions Tracked", icon: <Activity className="w-8 h-8" /> },
     { number: "99.2%", label: "System Uptime", icon: <Star className="w-8 h-8" /> }
@@ -130,8 +130,8 @@ export default function AboutPage() {
   const milestones = [
     {
       year: "2019",
-      title: "ABY Inventory Launch",
-      description: "Launched a robust system for seamless stock and financial tracking.",
+      title: "Higura Decor Launch",
+      description: "Launched a robust system for seamless stock and rental tracking.",
       icon: <Rocket className="w-6 h-6" />
     },
     {
@@ -162,7 +162,7 @@ export default function AboutPage() {
 
   const testimonials = [
     {
-      quote: "ABY Inventory streamlined our warehouse operations, eliminating stock errors completely.",
+      quote: "Higura Decor streamlined our operations, eliminating stock errors completely.",
       author: "Patricia Uwimana",
       position: "Operations Manager",
       company: "Prime Distribution Ltd"
@@ -193,7 +193,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-gray-100 font-sans">
       {/* Header Section with Hero Image */}
         <HeaderBanner
-        title="About Aby Inventory"
+        title="About Higura Decor"
         subtitle="Home / About us"
         backgroundStyle="image"
         icon={<Package className="w-10 h-10 text-white" />}
