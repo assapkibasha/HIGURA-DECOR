@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "**/*spec.ts",
+    "src/modules/Summary/**",
+    "src/modules/activity-managament/**",
+    "src/modules/admin/**",
+    "src/modules/backorder-management/**",
+    "src/modules/category-management/**",
+    "src/modules/employee-managment/**",
+    "src/modules/notifications/**",
+    "src/modules/partner-management/**",
+    "src/modules/product-managment/**",
+    "src/modules/push-notification/**",
+    "src/modules/report-management/**",
+    "src/modules/requisition-management/**",
+    "src/modules/salesReturn-management/**",
+    "src/modules/stockin-managment/**",
+    "src/modules/stockout-management/**",
+    "src/modules/task-management/**"
+  ]
+}

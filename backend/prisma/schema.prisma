@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  user
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  username     String    @unique
+  passwordHash String
+  role         UserRole  @default(user)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions     Session[]
+  stocks       Stock[]
+  rentals      Rental[]
+  historyRentals HistoryRental[]
+  notificationsCreated Notification[] @relation("NotificationsCreated")
+  syncMutations SyncMutation[]
+}
+
+model Session {
+  id               String    @id @default(cuid())
+  userId           String
+  refreshTokenHash String
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  phoneE164 String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rentals   Rental[]
+}
+
+model Stock {
+  id           String   @id @default(uuid())
+  name         String
+  color        String
+  size         String
+  quantity     Int
+  imageUrls    Json?
+  dailyLateFee Int      @default(1000)
+  createdById  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  rentalItems RentalItem[]
+
+  @@index([createdById])
+  @@index([name])
+}
+
+enum RentalStatus {
+  rented
+  returned
+}
+
+model Rental {
+  id           String       @id @default(uuid())
+  customerId   String
+  deadlineDate DateTime
+  paidAmount   Int
+  status       RentalStatus @default(rented)
+  processedById String
+  rentedOn     DateTime     @default(now())
+  returnedOn   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  customer    Customer   @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  processedBy User       @relation(fields: [processedById], references: [id], onDelete: Restrict)
+  items       RentalItem[]
+  history     HistoryRental?
+
+  @@index([customerId])
+  @@index([status])
+  @@index([deadlineDate])
+}
+
+model RentalItem {
+  id                 String   @id @default(uuid())
+  rentalId           String
+  stockId            String
+  qty                Int
+  dailyLateFeeSnapshot Int    @default(1000)
+  createdAt          DateTime @default(now())
+
+  rental Rental @relation(fields: [rentalId], references: [id], onDelete: Cascade)
+  stock  Stock  @relation(fields: [stockId], references: [id], onDelete: Restrict)
+
+  @@index([rentalId])
+  @@index([stockId])
+}
+
+model HistoryRental {
+  id               String   @id @default(cuid())
+  rentalId         String   @unique
+  customerSnapshot Json
+  itemsSnapshot    Json
+  rentedOn         DateTime
+  returnedOn       DateTime?
+  lateDays         Int
+  totalFees        Int
+  processedById    String
+  createdAt        DateTime @default(now())
+
+  rental Rental @relation(fields: [rentalId], references: [id], onDelete: Cascade)
+  processedBy User @relation(fields: [processedById], references: [id], onDelete: Restrict)
+
+  @@index([processedById])
+  @@index([createdAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  message   String
+  recipients Json
+  createdById String?
+  createdAt DateTime @default(now())
+  readMap   Json?
+
+  createdBy User? @relation("NotificationsCreated", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+}
+
+enum SyncMutationStatus {
+  APPLIED
+  FAILED
+}
+
+model SyncMutation {
+  id               String             @id @default(cuid())
+  clientMutationId String             @unique
+  userId           String
+  status           SyncMutationStatus
+  errorMessage     String?
+  appliedAt        DateTime           @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([appliedAt])
+}

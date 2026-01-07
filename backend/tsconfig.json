@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/modules/Summary/**",
+    "src/modules/activity-managament/**",
+    "src/modules/admin/**",
+    "src/modules/backorder-management/**",
+    "src/modules/category-management/**",
+    "src/modules/employee-managment/**",
+    "src/modules/notifications/**",
+    "src/modules/partner-management/**",
+    "src/modules/product-managment/**",
+    "src/modules/push-notification/**",
+    "src/modules/report-management/**",
+    "src/modules/requisition-management/**",
+    "src/modules/salesReturn-management/**",
+    "src/modules/stockin-managment/**",
+    "src/modules/stockout-management/**",
+    "src/modules/task-management/**"
+  ]
+}
